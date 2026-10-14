@@ -6,9 +6,15 @@ from dotenv import load_dotenv
 
 load_dotenv(override=True)
 
-ENDPOINT = os.getenv("AZURE_OPENAI_ENDPOINT")
-API_KEY = os.getenv("AZURE_OPENAI_API_KEY")
-DEPLOYMENT = os.getenv("AZURE_OPENAI_DEPLOYMENT")
+def get_config(key):
+    # En Streamlit Cloud: usa st.secrets. En local: usa el .env
+    if key in st.secrets:
+        return st.secrets[key]
+    return os.getenv(key)
+
+ENDPOINT = get_config("AZURE_OPENAI_ENDPOINT")
+API_KEY = get_config("AZURE_OPENAI_API_KEY")
+DEPLOYMENT = get_config("AZURE_OPENAI_DEPLOYMENT")
 
 client = OpenAI(
     base_url=ENDPOINT,
